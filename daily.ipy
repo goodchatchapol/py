@@ -1,0 +1,49 @@
+from ast import If
+
+import datetime
+
+import glob
+
+import os
+
+import shutil
+
+from tkinter import HIDDEN
+
+import uuid
+
+from doctest import DocFileTest
+
+from email.utils import format_datetime
+
+from math import fabs
+
+from operator import index
+
+from pickle import NONE
+
+import pandas as pd
+
+import pyodbc
+
+import xlsxwriter
+
+from matplotlib.pyplot import axis
+
+
+
+data_file_folder = 'C:\\Users\\chatchapol.p\\Desktop\\New folder\\'
+
+
+df = []
+
+for file in os.listdir(data_file_folder):
+
+    if file.endswith('.xlsx'):
+
+        print('Loading file {0}...'.format(file))
+
+        df.append(pd.read_excel(os.path.join(data_file_folder, file), sheet_name='Sheet1'))
+        
+ df_master = pd.concat(df, axis = 0)
+ df_master.to_excel('master.xlsx',index=False)

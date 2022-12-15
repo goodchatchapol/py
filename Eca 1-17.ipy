@@ -1,0 +1,103 @@
+from ast import If
+
+import datetime
+
+import glob
+
+import os
+
+import shutil
+
+from tkinter import HIDDEN
+
+import uuid
+
+from doctest import DocFileTest
+
+from email.utils import format_datetime
+
+from math import fabs
+
+from operator import index
+
+from pickle import NONE
+
+import pandas as pd
+
+import pyodbc
+
+import xlsxwriter
+
+from matplotlib.pyplot import axis
+
+import jinja2
+
+
+data_file_folder = "C:\\Users\\thanutcha.l\\OneDrive - COLLECTIUS SYSTEMS PTE. LTD\\Desktop\\New folder\\"
+
+
+
+df = []
+
+for file in os.listdir(data_file_folder):
+
+    if file.endswith('.xlsx'):
+
+        print('Loading file {0}...'.format(file))
+
+        df.append(pd.read_excel(os.path.join(data_file_folder, file), sheet_name='Sheet1'))
+
+       
+
+# Len(df)
+
+df_combine = pd.concat(df, axis=0)
+file = df_combine[df_combine['Master file'] == 'EKN']
+file['Transaction Date Posting '] = pd.to_datetime(file['Transaction Date Posting ']).dt.date
+file['Effective Transaction Date'] = pd.to_datetime(file['Effective Transaction Date']).dt.date
+
+
+
+
+
+
+
+todaysdate_filename = str(
+
+    datetime.datetime.now().strftime("ECA %H%M %Y%m%d")) + '.xlsx'
+
+writer = pd.ExcelWriter(todaysdate_filename)
+
+print("\n",file, f"{todaysdate_filename }""\n")
+
+file.to_excel(writer, index=False, sheet_name= 'sheet')
+
+
+workbook  = writer.book
+worksheet = writer.sheets['sheet']
+
+
+## Add some cell formats.
+
+format1 = workbook.add_format({'num_format': '@'})
+format3 = workbook.add_format({'num_format': 'mm/dd/yy'})
+
+
+
+
+## Set the column width and format.
+
+worksheet.set_column('F:F', 20)
+worksheet.set_column('G:G', 20)
+
+#worksheet.set_column('B:B', 12)
+
+
+
+
+##Formula
+
+#worksheet.write_dynamic_array_formula('E2:E999', '=B2:B999&""')
+
+writer.save()
+
